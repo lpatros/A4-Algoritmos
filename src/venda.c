@@ -69,7 +69,7 @@ void adicionarVenda(Venda vendas[], int *numVendas, int *proximoIdCliente) {
 }
 
 void salvarVendas(Venda vendas[], int numVendas) {
-    FILE *arquivo = fopen(NOME_ARQUIVO, "w");
+    FILE *arquivo = fopen(ARQUIVO, "w");
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo para escrita.\n");
         return;
@@ -77,7 +77,7 @@ void salvarVendas(Venda vendas[], int numVendas) {
     
     int i;
     for (i = 0; i < numVendas; i++) {
-        fprintf(arquivo, "%s;%d;%d;%s;%s;%d;%.2f;%.2f\n",
+        fprintf(arquivo, "%s %d %d %s %s %d %.2f %.2f\n",
                 vendas[i].data, vendas[i].idCliente, vendas[i].codigoItem,
                 vendas[i].nomeItem, vendas[i].marcaItem, vendas[i].quantidade,
                 vendas[i].precoUnitario, vendas[i].precoTotal);
@@ -87,7 +87,7 @@ void salvarVendas(Venda vendas[], int numVendas) {
 }
 
 int carregarVendas(Venda vendas[]) {
-    FILE *arquivo = fopen(NOME_ARQUIVO, "r");
+    FILE *arquivo = fopen(ARQUIVO, "r");
     if (arquivo == NULL) {
         // Não é um erro fatal, apenas informa que um novo arquivo será criado
         // printf("Arquivo de dados nao encontrado. Um novo sera criado ao salvar.\n");

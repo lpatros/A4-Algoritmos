@@ -2,7 +2,7 @@
 #define VENDA_H
 
 #define MAX_VENDAS 1000
-#define NOME_ARQUIVO "loja_roupa.txt"
+#define ARQUIVO "data/loja_roupa.txt"
 
 typedef struct {
     char data[11];
