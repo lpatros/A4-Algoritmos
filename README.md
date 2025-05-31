@@ -1,5 +1,17 @@
 # A4 - Algoritmos e Laboratorio de Programacao
 
+## Sumário
+- [Enunciado](#enunciado)
+  - [Situação-Problema](#situação-problema)
+  - [Metodologia](#metodologia)
+- [Funcionalidades Implementadas](#funcionalidades-implementadas)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Como Compilar e Rodar o Projeto](#como-compilar-e-rodar-o-projeto)
+  - [Pré-requisitos](#pré-requisitos)
+  - [Compilação](#compilação)
+  - [Execução](#execução)
+
 ## Enunciado
 
 ### Situação-Problema
