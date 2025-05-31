@@ -96,7 +96,7 @@ int carregarVendas(Venda vendas[]) {
 
     int count = 0;
     while (count < MAX_VENDAS &&
-           fscanf(arquivo, "%10[^;];%d;%d;%49[^;];%49[^;];%d;%f;%f\n",
+           fscanf(arquivo, "%10[^ ] %d %d %49[^ ] %49[^ ] %d %f %f\n",
                   vendas[count].data, &vendas[count].idCliente, &vendas[count].codigoItem,
                   vendas[count].nomeItem, vendas[count].marcaItem, &vendas[count].quantidade,
                   &vendas[count].precoUnitario, &vendas[count].precoTotal) == 8) {
