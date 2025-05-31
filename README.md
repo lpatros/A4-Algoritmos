@@ -77,18 +77,20 @@ O sistema de registro de vendas da loja de roupas oferece as seguintes funcional
 
 ```
 .
+├── data/
+│   └── loja_roupa.txt    # Arquivo de dados das vendas
 ├── include/
-│   ├── relatorios.h      # Cabeçalho para relatorios.c
-│   └── utils.h           # Cabeçalho para utils.c
-│   ├── venda.h           # Cabeçalho para venda.c
+│   ├── relatorios.h      # Cabeçalho para as funções de relatórios
+│   ├── utils.h           # Cabeçalho para as funções utilitárias
+│   └── venda.h           # Cabeçalho para as funções de venda
 ├── src/
-│   ├── relatorios.c      # Funções para geração de relatórios
-│   ├── venda.c           # Funções relacionadas ao registro e cálculo de vendas
+│   ├── relatorios.c      # Implementação das funções de geração de relatórios
+│   ├── venda.c           # Implementação das funções de registro e manipulação de vendas
 ├── utils/
-│   ├── utils.c           # Funções utilitárias
-├── loja_roupa.txt        # Arquivo de dados 
-├── main.c                # Arquivo principal, menu e fluxo do programa
-└── README.md
+│   └── utils.c           # Implementação das funções utilitárias
+├── .gitignore            # Especifica arquivos intencionalmente não rastreados pelo Git
+├── main.c                # Arquivo principal com o menu e fluxo do programa
+└── README.md             # Documentação do projeto
 ```
 
 ## Como Compilar e Rodar o Projeto
