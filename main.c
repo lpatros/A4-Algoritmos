@@ -1,15 +1,16 @@
 #include <stdio.h>
+#include <string.h>
 #include "include/venda.h"
 #include "include/utils.h"
 #include "include/relatorios.h"
 
 int main() {
     Venda vendas[MAX_VENDAS];
-    int numVendas = 0;
-    int proximoIdCliente = 1;
-    int opcao;
+    Venda novaVenda;
+    int numVendas;
+    int proximoIdCliente;
 
-    // Carrega os dados do arquivo ao iniciar
+
     numVendas = carregarVendas(vendas);
     if (numVendas > 0) {
         printf("%d registros de vendas carregados do arquivo.\n", numVendas);
@@ -28,41 +29,66 @@ int main() {
         proximoIdCliente = 1; // Garante que começa em 1 se não houver vendas
     }
 
+    int isRunning = 1;
 
-    printf("============================================\n");
-    printf("   Sistema de Vendas - Loja de Roupas\n");
-    printf("============================================\n");
+    while (isRunning) {
+        menu();
 
-    do {
-        printf("\nMenu Principal:\n");
-        printf("1. Registrar Nova Venda (Cliente)\n");
-        printf("2. Gerar Relatorios Gerenciais\n");
-        printf("3. Sair\n");
-        printf("Escolha uma opcao: ");
-        
-        if (scanf("%d", &opcao) != 1) { // Verifica se a leitura foi bem sucedida
-            printf("Entrada invalida. Por favor, insira um numero.\n");
-            limparBufferEntrada();
-            opcao = 0; // Reseta a opção para evitar loop infinito se não for número
-            continue;  // Volta para o início do loop
-        }
-        limparBufferEntrada();
+        int option;
+        scanf("%d", &option);
 
-        switch (opcao) {
+        limparTerminal();
+
+        switch (option) {
             case 1:
-                adicionarVenda(vendas, &numVendas, &proximoIdCliente);
+                if (numVendas >= MAX_VENDAS) {
+                    color_printf("Limite máximo de vendas atingido.\n", COLOR_RED);
+                    break;
+                }
+
+                Venda novaVenda;
+
+                // Atribui o ID do cliente atual à nova venda.
+                // Este ID representa a "entidade" que está comprando agora.
+                novaVenda.idCliente = proximoIdCliente;
+
+                printf("--- Registrar Nova Venda ---\n");
+                printf("Digite o código do item: ");
+                scanf("%d", &novaVenda.codigoItem);
+                limparBufferEntrada(); 
+
+                printf("Digite o nome do item: ");
+                fgets(novaVenda.nomeItem, sizeof(novaVenda.nomeItem), stdin);
+                novaVenda.nomeItem[strcspn(novaVenda.nomeItem, "\n")] = 0; // Remove a nova linha
+
+                printf("Digite a marca do item: ");
+                fgets(novaVenda.marcaItem, sizeof(novaVenda.marcaItem), stdin);
+                novaVenda.marcaItem[strcspn(novaVenda.marcaItem, "\n")] = 0;
+
+                printf("Digite a quantidade: ");
+                scanf("%d", &novaVenda.quantidade);
+                limparBufferEntrada();
+
+                printf("Digite o preço unitário: ");
+                scanf("%f", &novaVenda.precoUnitario);
+                limparBufferEntrada();
+
+                // printf("Digite a data da venda (dd/mm/yyyy): ");
+                // scanf("%d/%d/%d", &novaVenda.data.dia, &novaVenda.data.mes, &novaVenda.data.ano);
+                // limparBufferEntrada();
+
+                adicionarVenda(vendas, &novaVenda, &numVendas, &proximoIdCliente);
+                salvarVendas(vendas, &numVendas);
+
                 break;
             case 2:
-                gerarRelatorios(vendas, numVendas);
-                break;
-            case 3:
-                printf("Salvando dados e finalizando o programa...\n");
-                salvarVendas(vendas, numVendas);
+                isRunning = 0;
                 break;
             default:
-                printf("Opcao invalida! Tente novamente.\n");
+                color_printf("Opcao nao implementada ainda.\n", COLOR_YELLOW);
+                break;
         }
-    } while (opcao != 3);
-
+        limparTerminal();
+    }
     return 0;
 }
