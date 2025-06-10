@@ -36,10 +36,13 @@ int main() {
 
         int option;
         scanf("%d", &option);
+        limparBufferEntrada();
 
         limparTerminal();
 
         switch (option) {
+            char dataConsulta[11];
+
             case 1:
                 if (numVendas >= MAX_VENDAS) {
                     color_printf("Limite máximo de vendas atingido.\n", COLOR_RED);
@@ -79,16 +82,52 @@ int main() {
 
                 adicionarVenda(vendas, &novaVenda, &numVendas, &proximoIdCliente);
                 salvarVendas(vendas, &numVendas);
+                resumoCompra(vendas, &numVendas);
 
                 break;
             case 2:
+                // printf("Insira a data para listar os produtos mais vendidos (dd/mm/yyyy): ");
+                // fgets(dataConsulta, sizeof(dataConsulta), stdin);
+                // dataConsulta[strcspn(dataConsulta, "\n")] = 0;
+
+                // listarVendasPorDia(vendas, &numVendas, dataConsulta);
+                break;
+            case 3:                
+                printf("Insira a data para consultar o faturamento (dd/mm/yyyy): ");
+                fgets(dataConsulta, sizeof(dataConsulta), stdin);
+                dataConsulta[strcspn(dataConsulta, "\n")] = 0;
+
+                exibirFaturamentoPorDia(vendas, &numVendas, dataConsulta);
+                break;
+            case 4:
+                printf("Insira a data para consultar a quantidade de clientes atendidos (dd/mm/yyyy): ");
+                fgets(dataConsulta, sizeof(dataConsulta), stdin);
+                dataConsulta[strcspn(dataConsulta, "\n")] = 0;
+
+                exibirQuantidadeClientesPorDia(vendas, &numVendas, dataConsulta);
+                break;
+            case 5:
+                printf("Insira a data para consultar o produto mais vendido (dd/mm/yyyy): ");
+                fgets(dataConsulta, sizeof(dataConsulta), stdin);
+                dataConsulta[strcspn(dataConsulta, "\n")] = 0;
+
+                exibirProdutoMaisVendidoPorDia(vendas, &numVendas, dataConsulta);
+                break;
+            case 6:
+                printf("Insira a data para consultar o produto menos vendido (dd/mm/yyyy): ");
+                fgets(dataConsulta, sizeof(dataConsulta), stdin);
+                dataConsulta[strcspn(dataConsulta, "\n")] = 0;
+
+                exibirProdutoMenosVendidoPorDia(vendas, &numVendas, dataConsulta);
+                break;
+            case 7:
                 isRunning = 0;
                 break;
             default:
                 color_printf("Opcao nao implementada ainda.\n", COLOR_YELLOW);
                 break;
         }
-        limparTerminal();
+        // limparTerminal();
     }
     return 0;
 }
