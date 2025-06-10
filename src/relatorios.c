@@ -2,13 +2,23 @@
 #include "../include/utils.h" 
 #include <stdio.h>
 #include <string.h>
-// #include <stdlib.h> // Para qsort
-#include <limits.h>
+#include <stdbool.h>
 
 void resumoCompra(Venda vendas[], int *numVendas) {
+    int totalQuantidadeVendida = 0;
+    Data dataAtual;
+
+    pegarDataAtual(&dataAtual);
+
+    for (int i = 0; i < *numVendas; i++) {
+        if (strcmp(vendas[i].data.dateStr, dataAtual.dateStr) == 0) {
+            totalQuantidadeVendida += vendas[i].quantidade;
+        }
+    }
+
     color_printf("------------------------------ Resumo da Compra -----------------------------\n", COLOR_WHITE);
-    printf("| %10s | %4s | %-10s | %5s | %9s | %5s | %10s |\n","ID Cliente", "Item", "Nome", "Marca", "Quantidade", "Preco", "Valor Total");
-    printf("| %10d | %4d | %-10s | %5s | %10d | %5.2f | %11.2f |\n",
+    printf("| %10s | %4s | %-10s | %10s | %9s | %5s | %10s |\n","ID Cliente", "Item", "Nome", "Marca", "Quantidade", "Preco", "Valor Total");
+    printf("| %10d | %4d | %-10s | %10s | %10d | %5.2f | %11.2f |\n",
         vendas[*numVendas - 1].idCliente,
         vendas[*numVendas - 1].codigoItem,
         vendas[*numVendas - 1].nomeItem,
@@ -18,10 +28,67 @@ void resumoCompra(Venda vendas[], int *numVendas) {
         vendas[*numVendas - 1].precoTotal
     );
     color_printf("-----------------------------------------------------------------------------\n", COLOR_WHITE);
+    printf("Total de itens vendidos: %d\n", totalQuantidadeVendida);
 }
 
-// TODO: Implementar a listagem de vendas em ordem descrescente de faturamento
-void listarVendasPorDia(Venda vendas[], int *numVendas, const char *dataConsulta);
+void listarVendasPorDia(Venda vendas[], int *numVendas, const char *dataConsulta) {
+    Venda vendasDoDia[*numVendas]; 
+    int numVendasDoDia = 0;
+    int totalQuantidadeVendidaDia = 0;
+
+    for (int i = 0; i < *numVendas; i++) {
+        if (strcmp(vendas[i].data.dateStr, dataConsulta) == 0) {
+            vendasDoDia[numVendasDoDia] = vendas[i];
+            totalQuantidadeVendidaDia += vendas[i].quantidade;
+            numVendasDoDia++;
+        }
+    }
+
+    if (numVendasDoDia == 0) {
+        printf("Nenhuma venda registrada para o dia %s.\n", dataConsulta);
+        color_printf("---------------------------------------------------------------------------\n", COLOR_WHITE);
+        return;
+    }
+
+    for (int i = 0; i < numVendasDoDia - 1; i++) {
+        bool swapped_in_pass = false;
+        for (int j = 0; j < numVendasDoDia - 1 - i; j++) {
+            if (vendasDoDia[j].precoTotal < vendasDoDia[j+1].precoTotal) {
+                Venda temp = vendasDoDia[j];
+                vendasDoDia[j] = vendasDoDia[j+1];
+                vendasDoDia[j+1] = temp;
+                swapped_in_pass = true; // Marca que uma troca ocorreu
+            }
+        }
+        if (!swapped_in_pass) {
+            break;
+        }
+    }
+
+    char title_str[120];
+    sprintf(title_str, "----------- Vendas do Dia (%s) - Ordenadas por Faturamento -----------", dataConsulta);
+    color_printf(title_str, COLOR_WHITE);
+    printf("\n");
+
+    printf("| %10s | %4s | %-10s | %20s | %10s | %5s | %11s |\n",
+        "ID Cliente", "Item", "Nome", "Marca", "Quantidade", "Preco", "Valor Total");
+    color_printf("|---------------------------------------------------------------------------|\n", COLOR_WHITE);
+
+    for (int i = 0; i < numVendasDoDia; i++) {
+        printf("| %10d | %4d | %-10s | %-20s | %10d | %5.2f | %11.2f |\n",
+            vendasDoDia[i].idCliente,
+            vendasDoDia[i].codigoItem,
+            vendasDoDia[i].nomeItem,
+            vendasDoDia[i].marcaItem,
+            vendasDoDia[i].quantidade,
+            vendasDoDia[i].precoUnitario,
+            vendasDoDia[i].precoTotal
+        );
+    }
+    color_printf("-----------------------------------------------------------------------------\n", COLOR_WHITE);
+    printf("Total de itens vendidos no dia %s: %d\n", dataConsulta, totalQuantidadeVendidaDia);
+    color_printf("-----------------------------------------------------------------------------\n", COLOR_WHITE);
+}
 
 void exibirFaturamentoPorDia(Venda vendas[], int *numVendas, const char *dataConsulta) {
     float faturamentoTotal = 0.0;
@@ -113,12 +180,6 @@ void exibirProdutoMenosVendidoPorDia(Venda vendas[], int *numVendas, const char 
     ProdutoVendido produtos[100];
     int numProdutos = 0;
 
-    if (*numVendas == 0) {
-        printf("Nenhuma venda registrada.\n");
-        color_printf("----------------------------------------------------------\n", COLOR_WHITE);
-        return;
-    }
-
     // Somar quantidades por código de item
     for (int i = 0; i < *numVendas; i++) {
         if (strcmp(vendas[i].data.dateStr, dataConsulta) != 0) continue;
@@ -143,10 +204,11 @@ void exibirProdutoMenosVendidoPorDia(Venda vendas[], int *numVendas, const char 
     }
 
     // Encontrar o produto com menor quantidade
-    int menorQuantidade = INT_MAX; // Garantir que qualquer quantidade será menor
+    int menorQuantidade = produtos[0].quantidadeTotal; // Garantir que qualquer quantidade será menor
     int indiceMenor = -1;
+
     for (int i = 0; i < numProdutos; i++) {
-        if (produtos[i].quantidadeTotal < menorQuantidade) {
+        if (produtos[i].quantidadeTotal <= menorQuantidade) {
             menorQuantidade = produtos[i].quantidadeTotal;
             indiceMenor = i;
         }
