@@ -9,23 +9,7 @@ static float calcularPrecoTotal(int, float);
 void adicionarVenda(Venda vendas[], Venda *novaVenda, int *numVendas, int *proximoIdCliente) {
     novaVenda->precoTotal = calcularPrecoTotal(novaVenda->quantidade, novaVenda->precoUnitario);
     
-    // Obter a data atual
-    time_t t = time(NULL);
-    struct tm *data_atual_info = localtime(&t);
-    
-    // Verificar se localtime retornou um ponteiro válido
-    if (data_atual_info != NULL) {
-        novaVenda->data.dia = data_atual_info->tm_mday;
-        novaVenda->data.mes = data_atual_info->tm_mon + 1;     // tm_mon é 0-11 (janeiro = 0)
-        novaVenda->data.ano = data_atual_info->tm_year + 1900; // tm_year é o número de anos desde 1900
-    } else {
-        novaVenda->data.dia = 0;
-        novaVenda->data.mes = 0;
-        novaVenda->data.ano = 0;
-        color_printf("Erro ao obter a data atual. Usando data padrao (0/0/0).\n", COLOR_RED);
-    }
-    // Formata a data para o formato "DD/MM/AAAA"
-    sprintf(novaVenda->data.dateStr, "%02d/%02d/%04d", novaVenda->data.dia, novaVenda->data.mes, novaVenda->data.ano);
+    pegarDataAtual(&novaVenda->data);
     
     // Adiciona a nova venda ao array de vendas
     vendas[*numVendas] = *novaVenda;
