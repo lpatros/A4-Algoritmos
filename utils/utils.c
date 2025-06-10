@@ -31,3 +31,21 @@ void limparTerminal() {
     system("clear");
 #endif
 }
+
+void pegarDataAtual(Data *data) {
+    // Obter a data atual
+    time_t t = time(NULL);
+    struct tm *data_atual_info = localtime(&t);
+
+    if (data == NULL || data_atual_info == NULL) {
+        color_printf("Erro ao obter a data atual.\n", COLOR_RED);
+        return;
+    }
+
+    // Preencher a estrutura Data com a data atual
+    data->dia = data_atual_info->tm_mday;
+    data->mes = data_atual_info->tm_mon + 1;     // tm_mon é 0-11 (janeiro = 0)
+    data->ano = data_atual_info->tm_year + 1900; // tm_year é o número de anos desde 1900
+    // Formata a data para o formato "DD/MM/AAAA"
+    sprintf(data->dateStr, "%02d/%02d/%04d", data->dia, data->mes, data->ano);
+}
