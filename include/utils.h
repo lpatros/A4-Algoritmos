@@ -16,7 +16,7 @@ typedef enum {
 } ColorText;
 
 typedef struct {
-    char dateStr[11];   // Formato "DD/MM/AA"
+    char dateStr[11];   // Formato "DD/MM/AAAA"
     int dia;            // Dia do mês
     int mes;            // Mês do ano
     int ano;            // Ano
@@ -25,6 +25,7 @@ typedef struct {
 void menu();
 void limparTerminal();
 void limparBufferEntrada();
+void pegarDataAtual(Data *data);
 void color_printf(char *text, ColorText color);
 
 #endif
