@@ -109,7 +109,6 @@ void exibirProdutoMaisVendidoPorDia(Venda vendas[], int *numVendas, const char *
     color_printf("----------------------------------------------------\n", COLOR_WHITE);
 }
 
-// TODO: Corrigir a exibição do produto menos vendido. Atualmente o valor retonado está incorreto.
 void exibirProdutoMenosVendidoPorDia(Venda vendas[], int *numVendas, const char *dataConsulta) {
     ProdutoVendido produtos[100];
     int numProdutos = 0;
@@ -125,15 +124,7 @@ void exibirProdutoMenosVendidoPorDia(Venda vendas[], int *numVendas, const char 
         if (strcmp(vendas[i].data.dateStr, dataConsulta) != 0) continue;
 
         int encontrado = 0;
-
-        // Se não encontrado, adicionar novo produto
-        if (!encontrado) {
-            produtos[numProdutos].codigoItem = vendas[i].codigoItem;
-            strcpy(produtos[numProdutos].nomeItem, vendas[i].nomeItem);
-            produtos[numProdutos].quantidadeTotal = vendas[i].quantidade;
-            numProdutos++;
-        }
-
+        
         // Procurar se o código já existe no array
         for (int j = 0; j < numProdutos; j++) {
             if (produtos[j].codigoItem == vendas[i].codigoItem) {
@@ -141,6 +132,13 @@ void exibirProdutoMenosVendidoPorDia(Venda vendas[], int *numVendas, const char 
                 encontrado = 1;
                 break;
             }
+        }
+        // Se não encontrado, adicionar novo produto
+        if (!encontrado) {
+            produtos[numProdutos].codigoItem = vendas[i].codigoItem;
+            strcpy(produtos[numProdutos].nomeItem, vendas[i].nomeItem);
+            produtos[numProdutos].quantidadeTotal = vendas[i].quantidade;
+            numProdutos++;
         }
     }
 
