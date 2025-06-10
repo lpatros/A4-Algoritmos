@@ -49,9 +49,14 @@ void salvarVendas(Venda vendas[], int *numVendas) {
     for (i = 0; i < *numVendas; i++) {
         fprintf(arquivo, "%s %d %d %s %s %d %.2f %.2f\n",
                 vendas[i].data.dateStr,
-                vendas[i].idCliente, vendas[i].codigoItem,
-                vendas[i].nomeItem, vendas[i].marcaItem, vendas[i].quantidade,
-                vendas[i].precoUnitario, vendas[i].precoTotal);
+                vendas[i].idCliente,
+                vendas[i].codigoItem,
+                vendas[i].nomeItem,
+                vendas[i].marcaItem,
+                vendas[i].quantidade,
+                vendas[i].precoUnitario,
+                vendas[i].precoTotal
+            );
     }
     fclose(arquivo);
 }
