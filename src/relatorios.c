@@ -2,154 +2,187 @@
 #include "../include/utils.h" 
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h> // Para qsort
+// #include <stdlib.h> // Para qsort
+#include <limits.h>
 
-// Função de comparação para qsort, estática pois só é usada aqui
-static int compararVendas(const void *a, const void *b) {
-    Venda *vendaA = (Venda *)a;
-    Venda *vendaB = (Venda *)b;
-    if (vendaB->precoTotal > vendaA->precoTotal) return 1;
-    if (vendaB->precoTotal < vendaA->precoTotal) return -1;
-    return 0;
+void resumoCompra(Venda vendas[], int *numVendas) {
+    color_printf("------------------------------ Resumo da Compra -----------------------------\n", COLOR_WHITE);
+    printf("| %10s | %4s | %-10s | %5s | %9s | %5s | %10s |\n","ID Cliente", "Item", "Nome", "Marca", "Quantidade", "Preco", "Valor Total");
+    printf("| %10d | %4d | %-10s | %5s | %10d | %5.2f | %11.2f |\n",
+        vendas[*numVendas - 1].idCliente,
+        vendas[*numVendas - 1].codigoItem,
+        vendas[*numVendas - 1].nomeItem,
+        vendas[*numVendas - 1].marcaItem,
+        vendas[*numVendas - 1].quantidade,
+        vendas[*numVendas - 1].precoUnitario,
+        vendas[*numVendas - 1].precoTotal
+    );
+    color_printf("-----------------------------------------------------------------------------\n", COLOR_WHITE);
 }
 
-void gerarRelatorios(Venda vendas[], int numVendas) {
-    if (numVendas == 0) {
-        printf("\nNao ha dados de vendas para gerar relatorios.\n");
+// TODO: Implementar a listagem de vendas em ordem descrescente de faturamento
+void listarVendasPorDia(Venda vendas[], int *numVendas, const char *dataConsulta);
+
+void exibirFaturamentoPorDia(Venda vendas[], int *numVendas, const char *dataConsulta) {
+    float faturamentoTotal = 0.0;
+
+    for (int i = 0; i < *numVendas; i++) {
+        if (strcmp(vendas[i].data.dateStr, dataConsulta) == 0) {
+            faturamentoTotal += vendas[i].precoTotal;
+        }
+    }
+
+    color_printf("------ Faturamento do Dia ------\n", COLOR_WHITE);
+    printf("| %21s %.2f |\n", "Faturamento Total: R$", faturamentoTotal);
+    color_printf("--------------------------------\n", COLOR_WHITE);
+}
+
+void exibirQuantidadeClientesPorDia(Venda vendas[], int *numVendas, const char *dataConsulta) {
+    int quantidadeClientes = 0;
+
+    for (int i = 0; i < *numVendas; i++) {
+        if (strcmp(vendas[i].data.dateStr, dataConsulta) == 0) {
+            quantidadeClientes++;
+        }
+    }
+
+    printf("----- Clientes Atendidos no dia %s -----\n", vendas[*numVendas - 1].data.dateStr);
+    printf("| %-41s %d |\n", "Quantidade de Clientes: ", quantidadeClientes);
+    color_printf("------------------------------------------------\n", COLOR_WHITE);
+}
+
+void exibirProdutoMaisVendidoPorDia(Venda vendas[], int *numVendas, const char *dataConsulta) {
+    ProdutoVendido produtos[100];
+    int numProdutos = 0;
+
+    if (*numVendas == 0) {
+        printf("Nenhuma venda registrada.\n");
+        color_printf("----------------------------------------------------------\n", COLOR_WHITE);
         return;
     }
 
-    char dataRelatorio[11];
-    printf("\n--- Geracao de Relatorios ---\n");
-    printf("Digite a data para a qual deseja gerar os relatorios (dd/mm/yyyy): ");
-    scanf("%10s", dataRelatorio);
-    limparBufferEntrada();
+    // Somar quantidades por código de item
+    for (int i = 0; i < *numVendas; i++) {
+        if (strcmp(vendas[i].data.dateStr, dataConsulta) != 0) continue;
 
-    // 1. Quantidade total de itens vendidos no dia
-    int totalItensDia = 0;
-    int i;
-    for (i= 0; i < numVendas; i++) {
-        if (strcmp(vendas[i].data, dataRelatorio) == 0) {
-            totalItensDia += vendas[i].quantidade;
-        }
-    }
-    printf("\n-------------------------------------------------------------");
-    printf("\n1. Quantidade Total de Itens Vendidos em %s: %d\n", dataRelatorio, totalItensDia);
-
-    // Cria um array temporário com as vendas da data especificada
-    Venda vendasDoDia[MAX_VENDAS]; // Reutiliza MAX_VENDAS, poderia ser numVendas se garantido < MAX_VENDAS
-    int numVendasDia = 0;
-    int j;
-    for (j = 0; j < numVendas; j++) {
-        if (strcmp(vendas[j].data, dataRelatorio) == 0) {
-            if (numVendasDia < MAX_VENDAS) { // Segurança adicional
-                 vendasDoDia[numVendasDia++] = vendas[j];
-            }
-        }
-    }
-
-    // 2. Listar todas as vendas em ordem decrescente de valor
-    qsort(vendasDoDia, numVendasDia, sizeof(Venda), compararVendas);
-    printf("\n2. Lista de Vendas em %s (Ordem Decrescente de Valor):\n", dataRelatorio);
-    if (numVendasDia == 0) {
-        printf("   Nenhuma venda encontrada para esta data.\n");
-    } else {
-        printf("   %-15s | %-20s | %-10s | %-10s\n", "Cliente (ID)", "Item", "Qtd", "Valor Total");
-        printf("   ----------------------------------------------------------\n");
-        int a;
-        for (a = 0; a < numVendasDia; a++) {
-            printf("   %-15d | %-20s | %-10d | R$ %-8.2f\n",
-                   vendasDoDia[a].idCliente, vendasDoDia[a].nomeItem,
-                   vendasDoDia[a].quantidade, vendasDoDia[a].precoTotal);
-        }
-    }
-
-    // 3. Faturamento bruto diário
-    float faturamentoBruto = 0;
-    int x;
-    for (x = 0; x < numVendasDia; x++) {
-        faturamentoBruto += vendasDoDia[x].precoTotal;
-    }
-    printf("\n3. Faturamento Bruto em %s: R$ %.2f\n", dataRelatorio, faturamentoBruto);
-
-    // 4. Quantidade de clientes que compraram no dia
-    int clientesUnicosDia[MAX_VENDAS]; // Para armazenar IDs de clientes únicos
-    int numClientesUnicosDia = 0;
-    int b;
-    for (b = 0; b < numVendasDia; b++) {
         int encontrado = 0;
-        int c;
-        for (c = 0; c < numClientesUnicosDia; c++) {
-            if (vendasDoDia[b].idCliente == clientesUnicosDia[c]) {
+        
+        // Procurar se o código já existe no array
+        for (int j = 0; j < numProdutos; j++) {
+            if (produtos[j].codigoItem == vendas[i].codigoItem) {
+                produtos[j].quantidadeTotal += vendas[i].quantidade;
                 encontrado = 1;
                 break;
             }
         }
+        // Se não encontrado, adicionar novo produto
         if (!encontrado) {
-            if (numClientesUnicosDia < MAX_VENDAS) { // Segurança adicional
-                clientesUnicosDia[numClientesUnicosDia++] = vendasDoDia[b].idCliente;
-            }
+            produtos[numProdutos].codigoItem = vendas[i].codigoItem;
+            strcpy(produtos[numProdutos].nomeItem, vendas[i].nomeItem);
+            produtos[numProdutos].quantidadeTotal = vendas[i].quantidade;
+            numProdutos++;
         }
     }
-    printf("\n4. Quantidade de Clientes (unicos) em %s: %d\n", dataRelatorio, numClientesUnicosDia);
 
+    // Encontrar o produto com maior quantidade
+    int maiorQuantidade = -1;
+    int indiceMaior = -1;
 
-    // 5 & 6. Item mais e menos vendido
-    if (numVendasDia > 0) {
-        // Estrutura para agregar quantidades por item (local à função)
-        typedef struct {
-            int codigo;
-            char nome[50];
-            int qtdTotal;
-        } ItemAgregado;
-
-        ItemAgregado itensAgregados[MAX_VENDAS]; // Potencialmente muitos itens diferentes
-        int numItensAgregados = 0;
-
-        int h;
-        for (h = 0; h < numVendasDia; h++) {
-            int encontrado = 0;
-            int k;
-            for (k = 0; k < numItensAgregados; k++) {
-                if (vendasDoDia[h].codigoItem == itensAgregados[k].codigo) {
-                    itensAgregados[k].qtdTotal += vendasDoDia[h].quantidade;
-                    encontrado = 1;
-                    break;
-                }
-            }
-            if (!encontrado) {
-                if (numItensAgregados < MAX_VENDAS) { // Segurança
-                    itensAgregados[numItensAgregados].codigo = vendasDoDia[h].codigoItem;
-                    strcpy(itensAgregados[numItensAgregados].nome, vendasDoDia[h].nomeItem);
-                    itensAgregados[numItensAgregados].qtdTotal = vendasDoDia[h].quantidade;
-                    numItensAgregados++;
-                }
-            }
+    for (int i = 0; i < numProdutos; i++) {
+        if (produtos[i].quantidadeTotal > maiorQuantidade) {
+            maiorQuantidade = produtos[i].quantidadeTotal;
+            indiceMaior = i;
         }
+    }
 
-        if (numItensAgregados > 0) {
-            ItemAgregado maisVendido = itensAgregados[0];
-            ItemAgregado menosVendido = itensAgregados[0];
-
-            int indice;
-            for (indice = 1; indice < numItensAgregados; indice++) {
-                if (itensAgregados[indice].qtdTotal > maisVendido.qtdTotal) {
-                    maisVendido = itensAgregados[indice];
-                }
-                if (itensAgregados[indice].qtdTotal < menosVendido.qtdTotal) {
-                    menosVendido = itensAgregados[indice];
-                }
-            }
-            printf("\n5. Item Mais Vendido em %s: %s (Cod: %d, Total: %d unidades)\n", dataRelatorio, maisVendido.nome, maisVendido.codigo, maisVendido.qtdTotal);
-            printf("\n6. Item Menos Vendido em %s: %s (Cod: %d, Total: %d unidades)\n", dataRelatorio, menosVendido.nome, menosVendido.codigo, menosVendido.qtdTotal);
-        } else {
-             printf("\n5. Item Mais Vendido: N/A (nenhum item agregado)\n");
-             printf("\n6. Item Menos Vendido: N/A (nenhum item agregado)\n");
-        }
-
+    // Exibir resultado
+    if (indiceMaior != -1) {
+        printf("\n------- Produto mais vendido do dia %s -----\n", dataConsulta);
+        printf("| %4s | %-20s | %s |\n", "Item", "Nome", "Quantidade Vendida");
+        printf("| %4d | %-20s | %18d |\n",
+            produtos[indiceMaior].codigoItem,
+            produtos[indiceMaior].nomeItem,
+            produtos[indiceMaior].quantidadeTotal);
     } else {
-        printf("\n5. Item Mais Vendido: N/A (sem vendas na data)\n");
-        printf("\n6. Item Menos Vendido: N/A (sem vendas na data)\n");
+        printf("Nenhuma venda encontrada para o dia %s.\n", dataConsulta);
     }
-    printf("-------------------------------------------------------------\n");
+    color_printf("----------------------------------------------------\n", COLOR_WHITE);
 }
+
+// TODO: Corrigir a exibição do produto menos vendido. Atualmente o valor retonado está incorreto.
+void exibirProdutoMenosVendidoPorDia(Venda vendas[], int *numVendas, const char *dataConsulta) {
+    ProdutoVendido produtos[100];
+    int numProdutos = 0;
+
+    if (*numVendas == 0) {
+        printf("Nenhuma venda registrada.\n");
+        color_printf("----------------------------------------------------------\n", COLOR_WHITE);
+        return;
+    }
+
+    // Somar quantidades por código de item
+    for (int i = 0; i < *numVendas; i++) {
+        if (strcmp(vendas[i].data.dateStr, dataConsulta) != 0) continue;
+
+        int encontrado = 0;
+
+        // Se não encontrado, adicionar novo produto
+        if (!encontrado) {
+            produtos[numProdutos].codigoItem = vendas[i].codigoItem;
+            strcpy(produtos[numProdutos].nomeItem, vendas[i].nomeItem);
+            produtos[numProdutos].quantidadeTotal = vendas[i].quantidade;
+            numProdutos++;
+        }
+
+        // Procurar se o código já existe no array
+        for (int j = 0; j < numProdutos; j++) {
+            if (produtos[j].codigoItem == vendas[i].codigoItem) {
+                produtos[j].quantidadeTotal += vendas[i].quantidade;
+                encontrado = 1;
+                break;
+            }
+        }
+    }
+
+    // Encontrar o produto com menor quantidade
+    int menorQuantidade = INT_MAX; // Garantir que qualquer quantidade será menor
+    int indiceMenor = -1;
+    for (int i = 0; i < numProdutos; i++) {
+        if (produtos[i].quantidadeTotal < menorQuantidade) {
+            menorQuantidade = produtos[i].quantidadeTotal;
+            indiceMenor = i;
+        }
+    }
+
+    // Exibir resultado
+    if (indiceMenor != -1) {
+        printf("\n------ Produto menos vendido do dia %s -----\n", dataConsulta);
+        printf("| %4s | %-20s | %s |\n", "Item", "Nome", "Quantidade Vendida");
+        printf("| %4d | %-20s | %18d |\n",
+            produtos[indiceMenor].codigoItem,
+            produtos[indiceMenor].nomeItem,
+            produtos[indiceMenor].quantidadeTotal);
+    } else {
+        printf("Nenhuma venda encontrada para o dia %s.\n", dataConsulta);
+    }
+    color_printf("----------------------------------------------------\n", COLOR_WHITE);
+}
+
+// Opção 1: Registrar uma venda
+// - registrar uma venda
+// - resumoCompra()
+// }
+
+// Opção 2: Listar todas as vendas do dia em ordem decrescente de faturamento
+// - listar o resumo de vendas do dia em ordem decrescente de faturamento
+// - Soma da quantidade dos itens vendidos
+
+// Opção 3: Exibir o faturamento total do dia
+
+// Opção 4: Exibir a quantidade de clientes atendidos no dia
+
+// Opção 5: Exibir o produto mais vendido do dia
+
+// Opção 6: Exibir o produto menos vendido do dia
+
+// Opção 7: Sair
