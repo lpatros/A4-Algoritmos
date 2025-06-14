@@ -1,8 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <time.h>
-
 typedef enum {
     COLOR_RESET = 0,
     COLOR_BLACK = 30,
@@ -17,15 +15,16 @@ typedef enum {
 
 typedef struct {
     char dateStr[11];   // Formato "DD/MM/AAAA"
-    int dia;            // Dia do mês
-    int mes;            // Mês do ano
-    int ano;            // Ano
-} Data;
+    int day;            // Dia do mês
+    int month;          // Mês do ano
+    int year;           // Ano
+} Date;
 
 void menu();
-void limparTerminal();
-void limparBufferEntrada();
-void pegarDataAtual(Data *data);
+void clearTerminal();
+void clearInputBuffer();
+void getCurrentDate(Date *date);
+char* getConsultationDate();
 void color_printf(char *text, ColorText color);
 
 #endif

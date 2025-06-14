@@ -16,11 +16,11 @@
 
 ### Situação-Problema
 
-A atividade de implementação e desenvolvimento de um sistema envolve diversas estruturas de programação, independentemente da linguagem de programação escolhida. Neste viés, você deverá desenvolver um PROGRAMA EM LIGUAGEM C, que permita **registrar as vendas diárias de uma loja de roupas**, imprimindo no final do dia, os seguintes **relatórios**:
+A atividade de implementação e desenvolvimento de um sistema envolve diversas estruturas de programação, independentemente da linguagem de programação escolhida. Neste viés, você deverá desenvolver um PROGRAMA EM LIGUAGEM C, que permita **registrar as sale diárias de uma loja de roupas**, imprimindo no final do dia, os seguintes **relatórios**:
 
 - Quantidade total de itens vendidos no dia, no ato do registro da venda, ou seja, assim que finalizar aquela venda específica;
-- Listar todas as vendas realizadas no dia, em ordem decrescente, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
-- Faturamento bruto diário sob as vendas (o usuário digitará a data);
+- Listar todas as sale realizadas no dia, em ordem decrescente, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
+- Faturamento bruto diário sob as sale (o usuário digitará a data);
 - Quantidade de clientes que realizaram compras naquele dia (o usuário digitará a data);
 - Item mais vendido em uma determinada data informada pelo usuário;
 - Item menos vendido em uma determinada data informada pelo usuário.
@@ -37,8 +37,8 @@ Escreva um programa em Linguagem C que obedeça as seguintes diretivas:
 No final do dia, ou seja, quando não tiverem novos clientes a serem registrados, o programa deverá ser finalizado, gerando os seguintes **Relatórios Gerenciais**:
 
 - Quantidade total de itens vendidos no dia, no ato do registro da venda, ou seja, assim que finalizar aquela venda específica;
-- Listar todas as vendas realizadas no dia, **em ordem decrescente**, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
-- Faturamento bruto diário sob as vendas (o usuário digitará a data);
+- Listar todas as sale realizadas no dia, **em ordem decrescente**, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
+- Faturamento bruto diário sob as sale (o usuário digitará a data);
 - Quantidade de clientes que realizaram compras naquele dia (o usuário digitará a data);
 - Item mais vendido em uma determinada data informada pelo usuário;
 - Item menos vendido em uma determinada data informada pelo usuário.
@@ -46,28 +46,28 @@ No final do dia, ou seja, quando não tiverem novos clientes a serem registrados
 Você deverá obedecer, obrigatoriamente, os seguintes critérios:
 
 - Utilizar **struct**, **array**, **algoritmo de ordenação**, **funções**, **modularização**.
-- Gravar os dados no arquivo `loja_roupa.dat` ou `loja_roupa.txt`.
+- Gravar os dados no FILE `loja_roupa.dat` ou `loja_roupa.txt`.
 - Implementar a solução algorítmica em **linguagem C**.
 - Apresentar os testes realizados, ou seja, inserir os valores de entrada e mostrar os resultados obtidos (saída).
 - Para que seja validado o critério 4, será necessário realizar, ao menos três testes com entrada de dados distintas para cada um deles.
 
 ## Funcionalidades Implementadas
 
-O sistema de registro de vendas da loja de roupas oferece as seguintes funcionalidades:
+O sistema de registro de sale da loja de roupas oferece as seguintes funcionalidades:
 
-1.  **Registro de Vendas:**
+1.  **Registro de sale:**
     *   Cadastro de itens por venda: código, nome, marca, quantidade e preço unitário.
     *   Cálculo automático do preço pago por item.
     *   Aplicação de desconto de 10% para compras com 3 ou mais unidades do mesmo item.
 2.  **Relatórios Gerenciais:**
     *   Quantidade total de itens vendidos (após cada venda).
-    *   Listagem de vendas do dia em ordem decrescente de valor (por data).
+    *   Listagem de sale do dia em ordem decrescente de valor (por data).
     *   Faturamento bruto diário (por data).
     *   Quantidade de clientes que realizaram compras no dia (por data).
     *   Item mais vendido em uma data específica.
     *   Item menos vendido em uma data específica.
 3.  **Persistência de Dados:**
-    *   Os dados das vendas são armazenados no arquivo `loja_roupa.txt`.
+    *   Os dados das sale são armazenados no FILE `loja_roupa.txt`.
 
 ## Tecnologias Utilizadas
 
@@ -78,18 +78,18 @@ O sistema de registro de vendas da loja de roupas oferece as seguintes funcional
 ```
 .
 ├── data/
-│   └── loja_roupa.txt    # Arquivo de dados das vendas
+│   └── loja_roupa.txt    # FILE de dados das sale
 ├── include/
 │   ├── relatorios.h      # Cabeçalho para as funções de relatórios
 │   ├── utils.h           # Cabeçalho para as funções utilitárias
 │   └── venda.h           # Cabeçalho para as funções de venda
 ├── src/
 │   ├── relatorios.c      # Implementação das funções de geração de relatórios
-│   ├── venda.c           # Implementação das funções de registro e manipulação de vendas
+│   ├── venda.c           # Implementação das funções de registro e manipulação de sale
 ├── utils/
 │   └── utils.c           # Implementação das funções utilitárias
-├── .gitignore            # Especifica arquivos intencionalmente não rastreados pelo Git
-├── main.c                # Arquivo principal com o menu e fluxo do programa
+├── .gitignore            # Especifica FILEs intencionalmente não rastreados pelo Git
+├── main.c                # FILE principal com o menu e fluxo do programa
 └── README.md             # Documentação do projeto
 ```
 
@@ -104,12 +104,12 @@ O sistema de registro de vendas da loja de roupas oferece as seguintes funcional
 Abra o terminal na pasta raiz do projeto e execute o seguinte comando:
 
 ```bash
-gcc main.c utils/utils.c src/venda.c src/relatorios.c -o main
+gcc main.c include/*/*.c utils/*.c -o main
 ```
 
 ### Execução
 
-Após a compilação bem-sucedida, um arquivo executável chamado `main` (ou `main.exe` no Windows) será gerado. Para rodar o programa, execute:
+Após a compilação bem-sucedida, um FILE executável chamado `main` (ou `main.exe` no Windows) será gerado. Para rodar o programa, execute:
 
 No Linux/macOS:
 ```bash
