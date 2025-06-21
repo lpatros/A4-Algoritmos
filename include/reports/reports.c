@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 #include "reports.h"
 #include "../../utils/utils.h"
 
@@ -90,13 +89,13 @@ void listSaleByDay(SaleList saleList, const char *dataQuery) {
     }
 
     char title_str[120];
-    sprintf(title_str, "----------- sale do Dia (%s) - Ordenadas por Faturamento -----------", dataQuery);
+    sprintf(title_str, "------------------ Venda do Dia (%s) - Ordenadas por Faturamento -------------------", dataQuery);
     color_printf(title_str, COLOR_WHITE);
     printf("\n");
 
     printf("| %10s | %4s | %-10s | %-20s | %10s | %5s | %11s |\n",
         "ID Cliente", "Item", "Nome", "Marca", "Quantidade", "Preco", "Valor Total");
-    color_printf("|---------------------------------------------------------------------------|\n", COLOR_WHITE);
+    color_printf("|------------------------------------------------------------------------------------------|\n", COLOR_WHITE);
 
     for (int i = 0; i < saleOfTheDay.numSales; i++) {
         printf("| %10d | %4d | %-10s | %-20s | %10d | %5.2f | %11.2f |\n",
@@ -109,9 +108,9 @@ void listSaleByDay(SaleList saleList, const char *dataQuery) {
             saleOfTheDay.sales[i].totalPrice
         );
     }
-    color_printf("-----------------------------------------------------------------------------\n", COLOR_WHITE);
+    color_printf("|------------------------------------------------------------------------------------------|\n\n", COLOR_WHITE);
     printf("Total de itens vendidos no dia %s: %d\n", dataQuery, totalQuantitySoldDay);
-    color_printf("-----------------------------------------------------------------------------\n", COLOR_WHITE);
+
 }
 
 void displayBillingPerDay(SaleList saleList, const char *dataQuery) {
@@ -134,7 +133,7 @@ void displayNumberOfCustomersPerDay(SaleList saleList, const char *dataQuery) {
     int totalCustomers = getTotalCustomers(saleList);
 
     printf("----- Clientes Atendidos no dia %s -----\n", dataQuery);
-    printf("| %-41s %d |\n", "Quantidade de Clientes: ", totalCustomers);
+    printf("| %-42s %d |\n", "Quantidade de Clientes:  ", totalCustomers);
     color_printf("------------------------------------------------\n", COLOR_WHITE);
 }
 

@@ -20,7 +20,6 @@ void addSale(SaleList *saleList, const Sale sale) {
         return;
     }
 
-    saleList->nextClientId = saleList->sales->id + 1;
     saleList->sales[saleList->numSales++] = sale;
 }
 
@@ -44,6 +43,7 @@ void saveSale(SaleList *saleList, Sale sale) {
     );
 
     addSale(saleList, sale);
+    saleList->nextClientId = sale.id + 1;
     fclose(file);
 }
 
@@ -51,7 +51,7 @@ SaleList loadSales() {
     FILE *file = fopen(FILENAME, "r");
     SaleList salesList = {
         .numSales = 0,
-        .nextClientId = 0,
+        .nextClientId = 1, // Inicia em 1 por padrão
         .sales = NULL
     };
 
@@ -81,7 +81,13 @@ SaleList loadSales() {
         );
 
         addSale(&salesList, sale);
+        }
+
+    if (salesList.numSales > 0) {
+        // Define o próximo ID com base no último ID lido
+        salesList.nextClientId = salesList.sales[salesList.numSales - 1].id + 1;
     }
+
     fclose(file);
     return salesList;
 }

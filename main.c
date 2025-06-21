@@ -7,7 +7,6 @@
 void main() {
     Date currentDate;
     getCurrentDate(&currentDate);
-    char* consultationDate;
 
     Sale newSale = {
         .id = 0,
@@ -39,31 +38,43 @@ void main() {
         }
 
         if (option == 1) {
-            newSale.id = saleList.nextClientId;
+            int addMore = 0;
 
-            printf("--- Registrar Nova Venda ---\n");
-            printf("Digite o código do item: ");
-            scanf("%d", &newSale.codeItem);
-            clearInputBuffer();
+            do {
+                if (addMore) {
+                    saleList.nextClientId = saleList.nextClientId - 1;
+                }
+                newSale.id = saleList.nextClientId;
 
-            printf("Digite o nome do item: ");
-            fgets(newSale.nameItem, sizeof(newSale.nameItem), stdin);
-            newSale.nameItem[strcspn(newSale.nameItem, "\n")] = 0;
+                printf("--- Registrar Nova Venda ---\n");
+                printf("Digite o código do item: ");
+                scanf("%d", &newSale.codeItem);
+                clearInputBuffer();
 
-            printf("Digite a marca do item: ");
-            fgets(newSale.markItem, sizeof(newSale.markItem), stdin);
-            newSale.markItem[strcspn(newSale.markItem, "\n")] = 0;
+                printf("Digite o nome do item: ");
+                fgets(newSale.nameItem, sizeof(newSale.nameItem), stdin);
+                newSale.nameItem[strcspn(newSale.nameItem, "\n")] = 0;
 
-            printf("Digite a quantidade: ");
-            scanf("%d", &newSale.quantity);
-            clearInputBuffer();
+                printf("Digite a marca do item: ");
+                fgets(newSale.markItem, sizeof(newSale.markItem), stdin);
+                newSale.markItem[strcspn(newSale.markItem, "\n")] = 0;
 
-            printf("Digite o preço unitário: ");
-            scanf("%f", &newSale.unitPrice);
-            clearInputBuffer();
+                printf("Digite a quantidade: ");
+                scanf("%d", &newSale.quantity);
+                clearInputBuffer();
 
-            saveSale(&saleList, newSale);
-            summaryPurchase(saleList);
+                printf("Digite o preço unitário: ");
+                scanf("%f", &newSale.unitPrice);
+                clearInputBuffer();
+
+                saveSale(&saleList, newSale);
+                summaryPurchase(saleList);
+
+                printf("Deseja registrar outra venda? (1-Sim / 0-Não): ");
+                scanf("%d", &addMore);
+                clearInputBuffer();
+                clearTerminal();
+            } while (addMore);
         }
 
         if (option == 7) {
@@ -71,7 +82,11 @@ void main() {
             return;
         }
 
-        consultationDate = getConsultationDate();
+        char *consultationDate = NULL;
+
+        if (option >= 2 && option <= 6) {
+            consultationDate = getConsultationDate();
+        }
 
         switch (option) {
             case 2:
