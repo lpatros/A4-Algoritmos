@@ -16,11 +16,11 @@
 
 ### Situação-Problema
 
-A atividade de implementação e desenvolvimento de um sistema envolve diversas estruturas de programação, independentemente da linguagem de programação escolhida. Neste viés, você deverá desenvolver um PROGRAMA EM LIGUAGEM C, que permita **registrar as sale diárias de uma loja de roupas**, imprimindo no final do dia, os seguintes **relatórios**:
+A atividade de implementação e desenvolvimento de um sistema envolve diversas estruturas de programação, independentemente da linguagem de programação escolhida. Neste viés, você deverá desenvolver um PROGRAMA EM LIGUAGEM C, que permita **registrar as vendas diárias de uma loja de roupas**, imprimindo no final do dia, os seguintes **relatórios**:
 
 - Quantidade total de itens vendidos no dia, no ato do registro da venda, ou seja, assim que finalizar aquela venda específica;
-- Listar todas as sale realizadas no dia, em ordem decrescente, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
-- Faturamento bruto diário sob as sale (o usuário digitará a data);
+- Listar todas as vendas realizadas no dia, em ordem decrescente, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
+- Faturamento bruto diário sob as vendas (o usuário digitará a data);
 - Quantidade de clientes que realizaram compras naquele dia (o usuário digitará a data);
 - Item mais vendido em uma determinada data informada pelo usuário;
 - Item menos vendido em uma determinada data informada pelo usuário.
@@ -37,8 +37,8 @@ Escreva um programa em Linguagem C que obedeça as seguintes diretivas:
 No final do dia, ou seja, quando não tiverem novos clientes a serem registrados, o programa deverá ser finalizado, gerando os seguintes **Relatórios Gerenciais**:
 
 - Quantidade total de itens vendidos no dia, no ato do registro da venda, ou seja, assim que finalizar aquela venda específica;
-- Listar todas as sale realizadas no dia, **em ordem decrescente**, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
-- Faturamento bruto diário sob as sale (o usuário digitará a data);
+- Listar todas as vendas realizadas no dia, **em ordem decrescente**, ou seja, considerar a venda de maior valor prioritariamente, e assim por diante, até que todas sejam listadas. O usuário informará a data da venda;
+- Faturamento bruto diário sob as vendas (o usuário digitará a data);
 - Quantidade de clientes que realizaram compras naquele dia (o usuário digitará a data);
 - Item mais vendido em uma determinada data informada pelo usuário;
 - Item menos vendido em uma determinada data informada pelo usuário.
@@ -53,21 +53,21 @@ Você deverá obedecer, obrigatoriamente, os seguintes critérios:
 
 ## Funcionalidades Implementadas
 
-O sistema de registro de sale da loja de roupas oferece as seguintes funcionalidades:
+O sistema de registro de venda da loja de roupas oferece as seguintes funcionalidades:
 
-1.  **Registro de sale:**
+1.  **Registro de venda:**
     *   Cadastro de itens por venda: código, nome, marca, quantidade e preço unitário.
     *   Cálculo automático do preço pago por item.
     *   Aplicação de desconto de 10% para compras com 3 ou mais unidades do mesmo item.
 2.  **Relatórios Gerenciais:**
     *   Quantidade total de itens vendidos (após cada venda).
-    *   Listagem de sale do dia em ordem decrescente de valor (por data).
+    *   Listagem de vendas do dia em ordem decrescente de valor (por data).
     *   Faturamento bruto diário (por data).
     *   Quantidade de clientes que realizaram compras no dia (por data).
     *   Item mais vendido em uma data específica.
     *   Item menos vendido em uma data específica.
 3.  **Persistência de Dados:**
-    *   Os dados das sale são armazenados no FILE `loja_roupa.txt`.
+    *   Os dados das vendas são armazenados no FILE `loja_roupa.txt`.
 
 ## Tecnologias Utilizadas
 
@@ -78,14 +78,14 @@ O sistema de registro de sale da loja de roupas oferece as seguintes funcionalid
 ```
 .
 ├── data/
-│   └── loja_roupa.txt    # FILE de dados das sale
+│   └── loja_roupa.txt    # FILE de dados das vendas
 ├── include/
 │   ├── relatorios.h      # Cabeçalho para as funções de relatórios
 │   ├── utils.h           # Cabeçalho para as funções utilitárias
 │   └── venda.h           # Cabeçalho para as funções de venda
 ├── src/
 │   ├── relatorios.c      # Implementação das funções de geração de relatórios
-│   ├── venda.c           # Implementação das funções de registro e manipulação de sale
+│   ├── venda.c           # Implementação das funções de registro e manipulação de vendas
 ├── utils/
 │   └── utils.c           # Implementação das funções utilitárias
 ├── .gitignore            # Especifica FILEs intencionalmente não rastreados pelo Git

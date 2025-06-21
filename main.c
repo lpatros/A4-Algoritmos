@@ -47,7 +47,7 @@ void main() {
                 newSale.id = saleList.nextClientId;
 
                 printf("--- Registrar Nova Venda ---\n");
-                printf("Digite o código do item: ");
+                printf("Digite o codigo do item: ");
                 scanf("%d", &newSale.codeItem);
                 clearInputBuffer();
 
@@ -63,14 +63,14 @@ void main() {
                 scanf("%d", &newSale.quantity);
                 clearInputBuffer();
 
-                printf("Digite o preço unitário: ");
+                printf("Digite o preco unitario: ");
                 scanf("%f", &newSale.unitPrice);
                 clearInputBuffer();
 
                 saveSale(&saleList, newSale);
                 summaryPurchase(saleList);
 
-                printf("Deseja registrar outra venda? (1-Sim / 0-Não): ");
+                printf("Deseja registrar outra venda? (1-Sim / 0-Nao): ");
                 scanf("%d", &addMore);
                 clearInputBuffer();
                 clearTerminal();

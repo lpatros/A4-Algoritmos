@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include "reports.h"
 #include "../../utils/utils.h"
 
@@ -37,7 +38,7 @@ int getTotalCustomers(SaleList saleList) {
     getCurrentDate(&currentDate);
 
     for (int i = 0; i < saleList.numSales; i++) {
-        if (strcmp(saleList.sales[i].date.dateStr, currentDate.dateStr) == 0) {
+        if (strcmp(saleList.sales[i].date.dateStr, currentDate.dateStr) == 0 && saleList.sales[i + 1].id != saleList.sales[i].id) {
             totalQuantityCustomers++;
         }
     }
@@ -47,7 +48,7 @@ int getTotalCustomers(SaleList saleList) {
 void summaryPurchase(SaleList saleList) {
     int totalQuantitySold = getTotalQuantitySold(saleList);
 
-    color_printf("------------------------------ Resumo da Compra -----------------------------\n", COLOR_WHITE);
+    color_printf("--------------------------------- Resumo da Compra -------------------------------\n", COLOR_WHITE);
     printf("| %10s | %4s | %-10s | %10s | %9s | %5s | %10s |\n","ID Cliente", "Item", "Nome", "Marca", "Quantidade", "Preco", "Valor Total");
     printf("| %10d | %4d | %-10s | %10s | %10d | %5.2f | %11.2f |\n",
         saleList.sales[saleList.numSales - 1].id,
@@ -59,8 +60,8 @@ void summaryPurchase(SaleList saleList) {
         saleList.sales[saleList.numSales - 1].totalPrice
     );
 
-    color_printf("-----------------------------------------------------------------------------\n", COLOR_WHITE);
-    printf("Total de itens vendidos: %d\n", totalQuantitySold);
+    color_printf("----------------------------------------------------------------------------------\n", COLOR_WHITE);
+    printf("Total de itens vendidos hoje: %d\n", totalQuantitySold);
 }
 
 void listSaleByDay(SaleList saleList, const char *dataQuery) {
