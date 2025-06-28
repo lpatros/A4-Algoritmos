@@ -10,7 +10,7 @@ typedef struct {
 } ProductSold;
 
 SaleList getSalesByDay(SaleList saleList, const char *dataQuery);
-int getTotalQuantitySold(SaleList saleList);
+int getTotalQuantitySold(SaleList saleList, const char *dataQuery);
 void summaryPurchase(SaleList saleList);
 void listSaleByDay(SaleList saleList, const char *dataQuery);
 void displayBillingPerDay(SaleList saleList, const char *dataQuery);

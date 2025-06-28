@@ -18,13 +18,11 @@ SaleList getSalesByDay(SaleList saleList, const char *dataQuery) {
     return salesByDay;
 }
 
-int getTotalQuantitySold(SaleList saleList) {
-    Date currentDate;
+int getTotalQuantitySold(SaleList saleList, const char *dataQuery) {
     int totalQuantitySold = 0;
-    getCurrentDate(&currentDate);
-
+    
     for (int i = 0; i < saleList.numSales; i++) {
-        if (strcmp(saleList.sales[i].date.dateStr, currentDate.dateStr) == 0) {
+        if (strcmp(saleList.sales[i].date.dateStr, dataQuery) == 0) {
             totalQuantitySold += saleList.sales[i].quantity;
         }
     }
@@ -46,7 +44,10 @@ int getTotalCustomers(SaleList saleList) {
 }
 
 void summaryPurchase(SaleList saleList) {
-    int totalQuantitySold = getTotalQuantitySold(saleList);
+    Date currentDate;
+    getCurrentDate(&currentDate);
+
+    int totalQuantitySold = getTotalQuantitySold(saleList, currentDate.dateStr);
 
     color_printf("--------------------------------- Resumo da Compra -------------------------------\n", COLOR_WHITE);
     printf("| %10s | %4s | %-10s | %10s | %9s | %5s | %10s |\n","ID Cliente", "Item", "Nome", "Marca", "Quantidade", "Preco", "Valor Total");
@@ -66,7 +67,7 @@ void summaryPurchase(SaleList saleList) {
 
 void listSaleByDay(SaleList saleList, const char *dataQuery) {
     SaleList saleOfTheDay = getSalesByDay(saleList, dataQuery);
-    int totalQuantitySoldDay = getTotalQuantitySold(saleOfTheDay);
+    int totalQuantitySoldDay = getTotalQuantitySold(saleOfTheDay, dataQuery);
 
     if (saleOfTheDay.numSales == 0) {
         printf("Nenhuma venda registrada para o dia %s.\n", dataQuery);
